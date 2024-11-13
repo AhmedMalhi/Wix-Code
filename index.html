@@ -411,6 +411,9 @@
                     } else if (residency === "foreigner-fta" && partnerResidency === "foreigner-fta") {
                         absd = propertyValue * 0.60;
                         absdRate = "60%";
+                    } else if (residency === "pr" && partnerResidency === "pr") {
+                        absd = propertyValue * 0.30;
+                        absdRate = "30%";
                     } else if (residency === "singaporean" && partnerResidency === "pr") {
                         absd = propertyValue * 0.30;
                         absdRate = "30%";
@@ -466,6 +469,9 @@
                     } else if (residency === "foreigner-fta" && partnerResidency === "foreigner-fta") {
                         absd = propertyValue * 0.60;
                         absdRate = "60%";
+                    } else if (residency === "pr" && partnerResidency === "pr") {
+                        absd = propertyValue * 0.30;
+                        absdRate = "30%";
                     } else if (residency === "singaporean" && partnerResidency === "pr") {
                         absd = propertyValue * 0.35;
                         absdRate = "35%";
