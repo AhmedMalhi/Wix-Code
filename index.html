@@ -229,123 +229,271 @@
     </style>
 </head>
 <body>
+    <div class="calculator-container">
+        <div class="form-section">
+            <h2>Stamp Duty Calculator</h2>
+            <div class="input-group">
+                <label for="property-value">Property Value (S$)</label>
+                <input type="text" id="property-value" placeholder="e.g. 650,000" oninput="formatNumber(this)">
+            </div>
+            <div class="input-group">
+                <label for="purchase-type">Purchase Type</label>
+                <select id="purchase-type" onchange="togglePartnerStatus()">
+                    <option value="single">Single Application</option>
+                    <option value="joint-married">Joint (Married)</option>
+                    <option value="joint-not-married">Joint (Not Married)</option>
+                </select>
+            </div>
+            <div class="input-group" id="your-status-group">
+                <label for="residency">Your Status</label>
+                <select id="residency">
+                    <option value="singaporean">Singaporean</option>
+                    <option value="pr">Singapore Permanent Resident</option>
+                    <option value="foreigner">Foreigner</option>
+                </select>
+            </div>
+            <div class="input-group" id="partner-status-group" style="display: none;">
+                <label for="partner-residency">Partner's Status</label>
+                <select id="partner-residency">
+                    <option value="singaporean">Singaporean</option>
+                    <option value="pr">Singapore Permanent Resident</option>
+                    <option value="foreigner">Foreigner</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="existing-properties">Existing Properties Owned</label>
+                <input type="number" id="existing-properties" min="0" value="0">
+            </div>
+            <button class="calculate-button" id="calculate-button" onclick="calculateStampDuty()">Calculate Stamp Duty</button>
+        </div>
 
-  <h1>ABSD Calculator</h1>
-  
-  <!-- Dropdowns for applicant selection -->
-  <label for="applicant1">Applicant 1 (Choose Status): </label>
-  <select id="applicant1">
-    <option value="singaporean">Singaporean</option>
-    <option value="singapore_pr">Singapore PR</option>
-    <option value="foreigner">Foreigner</option>
-    <option value="foreigner_fta">Foreigner FTA</option>
-  </select>
+        <div class="result-section" id="result-section">
+            <div class="intro-section" id="intro-section">
+                <svg width="132" height="131" viewBox="0 0 132 131" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_1902_14900)">
+                    <path d="M127.096 103.026C127.096 69.2475 99.3326 41.8605 65.0895 41.8605C30.8464 41.8605 3.08301 69.2475 3.08301 103.026C3.08301 111.727 4.95871 120.321 8.60159 128.242H121.577C125.22 120.321 127.112 111.727 127.096 103.026Z" fill="#FAFAFA"/>
+                    <g opacity="0.5">
+                    <path d="M60.1224 71.8742H85.9851C86.5849 71.8741 87.1798 71.7651 87.7412 71.5526C86.3956 74.3779 82.701 84.2781 82.701 108.006H63.4066C63.4066 84.3929 59.7119 74.3779 58.2979 71.5526C58.8808 71.7734 59.4997 71.8825 60.1224 71.8742Z" fill="#CCCCCC"/>
+                    <path d="M59.1897 51.1923H85.4465C88.2623 51.1923 90.5449 53.4749 90.5449 56.2907V68.5269C90.5449 71.3426 88.2623 73.6253 85.4465 73.6253H59.1897C56.3739 73.6253 54.0913 71.3426 54.0913 68.5269V56.2907C54.0913 53.4749 56.3739 51.1923 59.1897 51.1923Z" fill="#CCCCCC"/>
+                    </g>
+                    <path d="M30.9141 131.3C30.5024 130.97 30.1945 130.513 30.0311 129.99L27.8184 122.88H105.907L103.602 129.99C103.439 130.513 103.131 130.97 102.719 131.3C102.308 131.631 101.812 131.82 101.297 131.841H32.336C31.8217 131.82 31.3258 131.631 30.9141 131.3Z" fill="white"/>
+                    <path d="M22.8193 119.609C22.8162 119.941 22.8793 120.271 23.0049 120.579C23.1305 120.887 23.3162 121.167 23.5511 121.403C23.786 121.64 24.0656 121.827 24.3737 121.955C24.6817 122.083 25.0122 122.149 25.346 122.149H107.22C107.554 122.149 107.885 122.083 108.193 121.955C108.501 121.827 108.78 121.64 109.015 121.403C109.25 121.167 109.436 120.887 109.561 120.579C109.687 120.271 109.75 119.941 109.747 119.609V112.681C109.75 111.347 109.489 110.027 108.979 108.794C108.469 107.561 107.72 106.441 106.775 105.497C105.829 104.554 104.706 103.805 103.47 103.294C102.234 102.783 100.909 102.52 99.5706 102.52H33.0188C31.6785 102.517 30.3508 102.778 29.112 103.287C27.8732 103.797 26.7476 104.545 25.7998 105.489C24.8521 106.433 24.1009 107.555 23.5894 108.789C23.078 110.023 22.8162 111.346 22.8193 112.681V119.609Z" fill="#F2F2F2" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M54.0873 66.3879H79.9499C80.5497 66.3877 81.1446 66.2788 81.7061 66.0663C80.3605 68.8916 76.6658 78.7917 76.6658 102.52H57.3714C57.3714 78.9066 53.6767 68.8916 52.2627 66.0663C52.8457 66.2871 53.4645 66.3962 54.0873 66.3879Z" fill="#F2F2F2" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M31.5677 130.561C31.0507 130.541 30.5521 130.364 30.1381 130.053C29.7242 129.743 29.4145 129.314 29.2503 128.823L27.0255 122.149H105.541L103.224 128.823C103.059 129.314 102.75 129.743 102.336 130.053" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M76.4629 94.7172H57.2607" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M53.1545 43.6333H79.4114C82.2271 43.6333 84.5098 45.9159 84.5098 48.7317V60.9679C84.5098 63.7837 82.2271 66.0663 79.4114 66.0663H53.1545C50.3388 66.0663 48.0561 63.7837 48.0561 60.9679V48.7317C48.0561 45.9159 50.3388 43.6333 53.1545 43.6333Z" fill="#F2F2F2" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M114.7 125.985L125.109 117.385" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M120.584 129.921L128.949 128.205" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4.85742 72C4.85742 69.2386 7.096 67 9.85742 67H63.2519C66.0134 67 68.2519 69.2386 68.2519 72V130.395H4.85742V72Z" fill="white" stroke="#CCCCCC" stroke-width="2"/>
+                    <rect x="10.4375" y="72.889" width="51.8225" height="14.494" fill="white" stroke="#CCCCCC" stroke-width="2"/>
+                    <rect opacity="0.5" x="53.8467" y="76.1492" width="5.24371" height="7.9601" fill="white" stroke="#CCCCCC" stroke-width="2"/>
+                    <rect opacity="0.5" x="43.8867" y="76.1492" width="5.24371" height="7.9601" fill="white" stroke="#CCCCCC" stroke-width="2"/>
+                    <rect x="49.6152" y="93.7235" width="12.7038" height="12.7038" fill="white" stroke="#CCCCCC" stroke-width="2"/>
+                    <path d="M52.2907 100.076H59.6426" stroke="#CCCCCC" stroke-width="2"/>
+                    <rect x="30.043" y="93.7235" width="12.7038" height="12.7038" fill="white" stroke="#CCCCCC" stroke-width="2"/>
+                    <circle cx="33.9441" cy="97.6245" r="1.22531" fill="#CCCCCC"/>
+                    <circle cx="38.8454" cy="102.526" r="1.22531" fill="#CCCCCC"/>
+                    <path d="M33.3311 103.139L39.4576 97.012" stroke="#CCCCCC" stroke-width="2"/>
+                    <rect x="10.4375" y="93.7235" width="12.7038" height="12.7038" fill="white" stroke="#CCCCCC" stroke-width="2"/>
+                    <path d="M13.7266 103.139L19.8531 97.0121" stroke="#CCCCCC" stroke-width="2"/>
+                    <path d="M20.0406 103.098L13.9141 96.9715" stroke="#CCCCCC" stroke-width="2"/>
+                    <rect x="49.8447" y="112.822" width="12.5636" height="12.5636" fill="white" stroke="#CCCCCC" stroke-width="2"/>
+                    <path d="M52.5339 117.819H59.8857" stroke="#CCCCCC" stroke-width="2"/>
+                    <path d="M52.5339 120.389H59.8857" stroke="#CCCCCC" stroke-width="2"/>
+                    <rect x="30.2861" y="112.822" width="12.7038" height="12.7038" fill="white" stroke="#CCCCCC" stroke-width="2"/>
+                    <path d="M33.5742 122.232L39.7008 116.105" stroke="#CCCCCC" stroke-width="2"/>
+                    <rect x="10.4375" y="112.822" width="12.5636" height="12.5636" fill="white" stroke="#CCCCCC" stroke-width="2"/>
+                    <path d="M16.6035 122.728V115.249" stroke="#CCCCCC" stroke-width="2"/>
+                    <path d="M12.8646 118.989H20.3438" stroke="#CCCCCC" stroke-width="2"/>
+                    <path d="M2.21191 130L144.663 130.344" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round"/>
+                    <path opacity="0.4" d="M67.7998 88L81.7998 120H67.7998V88Z" fill="#CCCCCC"/>
+                    <rect x="10.7051" y="25.5" width="7.89474" height="7.89474" fill="#CCCCCC"/>
+                    <rect x="26.498" y="9.5" width="7.89474" height="7.89474" fill="#CCCCCC"/>
+                    <rect x="1.21191" y="42.5" width="12.8289" height="12.8289" fill="#F2F2F2"/>
+                    <rect x="26.498" y="37.171" width="12.8289" height="12.8289" fill="#F2F2F2"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_1902_14900">
+                    <rect width="131.733" height="130" fill="white" transform="translate(0 0.5)"/>
+                    </clipPath>
+                    </defs>
+                    </svg>
+                    
+                <h3>Your stamp duty</h3>
+                <p>Enter your details to see a breakdown of your estimated stamp duty.</p>
+            </div>
 
-  <label for="applicant2">Applicant 2 (Choose Status - for Joint Application): </label>
-  <select id="applicant2">
-    <option value="none">None (Single Application)</option>
-    <option value="singaporean">Singaporean</option>
-    <option value="singapore_pr">Singapore PR</option>
-    <option value="foreigner">Foreigner</option>
-    <option value="foreigner_fta">Foreigner FTA</option>
-  </select>
+            <div class="result-summary" style="display: none;">
+                <h2>Your Estimated Stamp Duty</h2>
+                <p class="highlight">S$ <span id="total-result">0.00</span></p>
+                <div class="bar-chart">
+                    <div class="bsd-bar" id="bsd-bar" style="width: 50%;"></div>
+                    <div class="absd-bar" id="absd-bar" style="width: 50%;"></div>
+                </div>
+                <div class="legend">
+                    <span class="bsd-legend">Buyer's Stamp Duty S$ <span id="bsd-legend-amount">0.00</span></span>
+                    <span class="absd-legend">Additional Buyer's Stamp Duty S$ <span id="absd-legend-amount">0.00</span></span>
+                </div>
+            </div>
+            <div class="result-details" style="display: none;">
+                <table>
+                    <tr>
+                        <th>Property Value</th>
+                        <td>S$ <span id="property-value-result">0.00</span></td>
+                    </tr>
+                    <tr>
+                        <th>Buyer's Stamp Duty (BSD)</th>
+                        <td>S$ <span id="bsd-result">0.00</span></td>
+                    </tr>
+                    <tr>
+                        <th>ABSD</th>
+                        <td>S$ <span id="absd-result">0.00</span></td>
+                    </tr>
+                    <tr class="total">
+                        <th>Total Stamp Duty</th>
+                        <td>S$ <span id="total-result-table">0.00</span></td>
+                    </tr>
+                    <tr>
+                        <th>ABSD Rate</th>
+                        <td><span id="absd-rate">0%</span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="footer-text">by www.edrickproblemsolver.com</div> <!-- After the result -->
+        </div>
+    </div>
 
-  <!-- Dropdown for number of properties owned -->
-  <label for="num_properties">Number of Properties Owned: </label>
-  <select id="num_properties">
-    <option value="0">0</option>
-    <option value="1">1</option>
-    <option value="2">2 or more</option>
-  </select>
-
-  <!-- Button to calculate ABSD -->
-  <button onclick="calculateABSD()">Calculate ABSD</button>
-
-  <!-- Display result -->
-  <h2>ABSD Result: <span id="result"></span></h2>
-
-  <!-- Image Change -->
-  <img id="calculator-image" src="your-new-image-path.jpg" alt="ABSD Calculator Image">
-
-  <script>
-    function calculateABSD() {
-      const applicant1 = document.getElementById('applicant1').value;
-      const applicant2 = document.getElementById('applicant2').value;
-      const numProperties = parseInt(document.getElementById('num_properties').value);
-      
-      let absdRate = 0;
-
-      // Logic for Single Application (one applicant)
-      if (applicant2 === "none") {
-        if (applicant1 === "singaporean") {
-          if (numProperties === 0) absdRate = 0;
-          else if (numProperties === 1) absdRate = 20;
-          else if (numProperties >= 2) absdRate = 30;
-        } else if (applicant1 === "singapore_pr") {
-          if (numProperties === 0) absdRate = 5;
-          else if (numProperties === 1) absdRate = 30;
-          else if (numProperties >= 2) absdRate = 35;
-        } else if (applicant1 === "foreigner") {
-          absdRate = 60;
-        } else if (applicant1 === "foreigner_fta") {
-          absdRate = 60;
+    <script>
+        function formatNumber(input) {
+            let value = input.value.replace(/,/g, '');
+            if (!isNaN(value) && value !== '') {
+                input.value = Number(value).toLocaleString('en-US');
+            }
         }
-      }
 
-      // Logic for Joint Application (two applicants)
-      else {
-        if (applicant1 === "singaporean" && applicant2 === "singaporean") {
-          if (numProperties === 0) absdRate = 0;
-          else if (numProperties === 1) absdRate = 20;
-          else if (numProperties >= 2) absdRate = 30;
-        } else if (applicant1 === "singaporean" && applicant2 === "singapore_pr") {
-          if (numProperties === 0) absdRate = 0;
-          else if (numProperties === 1) absdRate = 30;
-          else if (numProperties >= 2) absdRate = 35;
-        } else if (applicant1 === "singaporean" && applicant2 === "foreigner") {
-          if (numProperties === 0) absdRate = 0;
-          else absdRate = 60;
-        } else if (applicant1 === "singaporean" && applicant2 === "foreigner_fta") {
-          if (numProperties === 0) absdRate = 0;
-          else if (numProperties === 1) absdRate = 20;
-          else if (numProperties >= 2) absdRate = 30;
+        function togglePartnerStatus() {
+            const purchaseType = document.getElementById('purchase-type').value;
+            const partnerStatusGroup = document.getElementById('partner-status-group');
+            partnerStatusGroup.style.display = (purchaseType === 'joint-married' || purchaseType === 'joint-not-married') ? 'block' : 'none';
         }
 
-        else if (applicant1 === "singapore_pr" && applicant2 === "singapore_pr") {
-          if (numProperties === 0) absdRate = 5;
-          else if (numProperties === 1) absdRate = 30;
-          else if (numProperties >= 2) absdRate = 35;
-        } else if (applicant1 === "singapore_pr" && applicant2 === "foreigner") {
-          if (numProperties === 0) absdRate = 60;
-          else absdRate = 60;
-        } else if (applicant1 === "singapore_pr" && applicant2 === "foreigner_fta") {
-          if (numProperties === 0) absdRate = 20;
-          else absdRate = 30;
-        }
+        function calculateStampDuty() {
+            let propertyValue = parseFloat(document.getElementById('property-value').value.replace(/,/g, ''));
+            let residency = document.getElementById('residency').value;
+            let existingProperties = parseInt(document.getElementById('existing-properties').value);
+            let purchaseType = document.getElementById('purchase-type').value;
+            let partnerResidency = document.getElementById('partner-residency') ? document.getElementById('partner-residency').value : null;
 
-        else if (applicant1 === "foreigner" && applicant2 === "singaporean") {
-          if (numProperties === 0) absdRate = 0;
-          else absdRate = 60;
-        } else if (applicant1 === "foreigner_fta" && applicant2 === "singaporean") {
-          if (numProperties === 0) absdRate = 0;
-          else if (numProperties === 1) absdRate = 60;
-          else absdRate = 60;
-        }
+            if (!propertyValue || propertyValue <= 0) {
+                alert("Please enter a valid property value.");
+                return;
+            }
 
-        else if (applicant1 === "foreigner" && applicant2 === "foreigner") {
-          absdRate = 60;
-        } else if (applicant1 === "foreigner" && applicant2 === "foreigner_fta") {
-          absdRate = 60;
-        }
+            // Buyer's Stamp Duty (BSD) Calculation
+            let bsd = 0;
+            if (propertyValue <= 180000) {
+                bsd = propertyValue * 0.01;
+            } else if (propertyValue <= 360000) {
+                bsd = (180000 * 0.01) + ((propertyValue - 180000) * 0.02);
+            } else {
+                bsd = (180000 * 0.01) + (180000 * 0.02) + ((propertyValue - 360000) * 0.03);
+            }
 
-        else if (applicant1 === "foreigner_fta" && applicant2 === "foreigner_fta") {
-          absdRate = 60;
-        }
-      }
+            bsd = Math.round(bsd);
 
-      // Display the result
-      document.getElementById('result').innerText = absdRate + "%";
-    }
-  </script>
+            // Additional Buyer's Stamp Duty (ABSD) Logic
+            let absd = 0;
+            let absdRate = "0%";
+
+            if (existingProperties === 1) {
+                // Existing Properties Owned = 1
+                if (purchaseType === "single") {
+                    if (residency === "singaporean") {
+                        absd = propertyValue * 0.20;
+                        absdRate = "20%";
+                    } else if (residency === "foreigner") {
+                        absd = propertyValue * 0.60;
+                        absdRate = "60%";
+                    } else if (residency === "pr") {
+                        absd = propertyValue * 0.30;
+                        absdRate = "30%";
+                    }
+                } else if (purchaseType === "joint-married" || purchaseType === "joint-not-married") {
+                    if (residency === "singaporean" && partnerResidency === "singaporean") {
+                        absd = propertyValue * 0.20;
+                        absdRate = "20%";
+                    } else if (residency === "foreigner" && partnerResidency === "singaporean") {
+                        absd = propertyValue * 0.60;
+                        absdRate = "60%";
+                    } else if (residency === "pr" && partnerResidency === "singaporean") {
+                        absd = propertyValue * 0.30;
+                        absdRate = "30%";
+                    } else if (residency === "singaporean" && partnerResidency === "foreigner") {
+                        absd = propertyValue * 0.60;
+                        absdRate = "60%";
+                    } else if (residency === "singaporean" && partnerResidency === "pr") {
+                        absd = propertyValue * 0.30;
+                        absdRate = "30%";
+                    }
+                }
+            } else if (existingProperties >= 2) {
+                // Existing Properties Owned = 2 or more
+                if (purchaseType === "single") {
+                    if (residency === "singaporean") {
+                        absd = propertyValue * 0.30;
+                        absdRate = "30%";
+                    } else if (residency === "foreigner") {
+                        absd = propertyValue * 0.60;
+                        absdRate = "60%";
+                    } else if (residency === "pr") {
+                        absd = propertyValue * 0.35;
+                        absdRate = "35%";
+                    }
+                } else if (purchaseType === "joint-married" || purchaseType === "joint-not-married") {
+                    if (residency === "singaporean" && partnerResidency === "singaporean") {
+                        absd = propertyValue * 0.30;
+                        absdRate = "30%";
+                    } else if (residency === "foreigner" && partnerResidency === "singaporean") {
+                        absd = propertyValue * 0.60;
+                        absdRate = "60%";
+                    } else if (residency === "pr" && partnerResidency === "singaporean") {
+                        absd = propertyValue * 0.35;
+                        absdRate = "35%";
+                    } else if (residency === "singaporean" && partnerResidency === "foreigner") {
+                        absd = propertyValue * 0.60;
+                        absdRate = "60%";
+                    } else if (residency === "singaporean" && partnerResidency === "pr") {
+                        absd = propertyValue * 0.35;
+                        absdRate = "35%";
+                    }
+                }
+            }
+
+            absd = Math.round(absd);
+
+            // Total Stamp Duty
+            let totalStampDuty = bsd + absd;
+
+            // Update the UI with formatted values
+            document.getElementById('property-value-result').innerHTML = propertyValue.toLocaleString();
+            document.getElementById('bsd-result').innerHTML = bsd.toLocaleString();
+            document.getElementById('absd-result').innerHTML = absd.toLocaleString();
+            document.getElementById('total-result').innerHTML = totalStampDuty.toLocaleString();
+            document.getElementById('total-result-table').innerHTML = totalStampDuty.toLocaleString();
+            document.getElementById('absd-rate').innerHTML = absdRate;
+
+            document.getElementById('bsd-legend-amount').innerHTML = bsd.toLocaleString();
+            document.getElementById('absd-legend-amount').innerHTML = absd.toLocaleString();
+
+            let total = bsd + absd;
+            document.getElementById('bsd-bar').style.width = `${(bsd / total) * 100}%`;
+            document.getElementById('absd-bar').style.width = `${(absd / total) * 100}%`;
+
+            document.getElementById('intro-section').style.display = "none";
+            document.querySelector('.result-summary').style.display = "block";
+            document.querySelector('.result-details').style.display = "block";
+            document.getElementById('calculate-button').innerText = 'Calculate Again';
+        }
+    </script>
 </body>
 </html>
