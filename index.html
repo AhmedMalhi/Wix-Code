@@ -358,7 +358,68 @@
             let absd = 0;
             let absdRate = "0%";
 
-            if (existingProperties === 1) {
+            if (existingProperties === 0) {
+                // Existing Properties Owned = 1
+                if (purchaseType === "single") {
+                    if (residency === "singaporean") {
+                        absd = propertyValue * 0.0;
+                        absdRate = "0%";
+                    } else if (residency === "foreigner") {
+                        absd = propertyValue * 0.60;
+                        absdRate = "60%";
+                    } else if (residency === "foreigner-fta") {
+                        absd = propertyValue * 0.60;
+                        absdRate = "60%";
+                    } else if (residency === "pr") {
+                        absd = propertyValue * 0.05;
+                        absdRate = "5%";
+                    }
+                } else if (purchaseType === "joint-married" || purchaseType === "joint-not-married") {
+                    if (residency === "singaporean" && partnerResidency === "singaporean") {
+                        absd = propertyValue * 0.0;
+                        absdRate = "0%";
+                    } else if (residency === "foreigner" && partnerResidency === "singaporean") {
+                        absd = propertyValue * 0.60;
+                        absdRate = "60%";
+                    } else if (residency === "foreigner-fta" && partnerResidency === "singaporean") {
+                        absd = propertyValue * 0.0;
+                        absdRate = "0%";
+                    } else if (residency === "foreigner-fta" && partnerResidency === "foreigner-fta") {
+                        absd = propertyValue * 0.00;
+                        absdRate = "0%";
+                    } else if (residency === "pr" && partnerResidency === "singaporean") {
+                        absd = propertyValue * 0.0;
+                        absdRate = "0%";
+                    } else if (residency === "pr" && partnerResidency === "foreigner-fta") {
+                        absd = propertyValue * 0.0;
+                        absdRate = "0%";
+                    } else if (residency === "pr" && partnerResidency === "foreigner") {
+                        absd = propertyValue * 0.60;
+                        absdRate = "60%";
+                    } else if (residency === "singaporean" && partnerResidency === "foreigner") {
+                        absd = propertyValue * 0.60;
+                        absdRate = "60%";
+                    } else if (residency === "singaporean" && partnerResidency === "foreigner-fta") {
+                        absd = propertyValue * 0.0;
+                        absdRate = "0%";
+                    } else if (residency === "foreigner" && partnerResidency === "pr") {
+                        absd = propertyValue * 0.60;
+                        absdRate = "60%";
+                    } else if (residency === "foreigner" && partnerResidency === "foreigner") {
+                        absd = propertyValue * 0.60;
+                        absdRate = "60%";
+                    } else if (residency === "foreigner-fta" && partnerResidency === "foreigner-fta") {
+                        absd = propertyValue * 0.0;
+                        absdRate = "0%";
+                    } else if (residency === "pr" && partnerResidency === "pr") {
+                        absd = propertyValue * 0.0;
+                        absdRate = "0%";
+                    } else if (residency === "singaporean" && partnerResidency === "pr") {
+                        absd = propertyValue * 0.0;
+                        absdRate = "0%";
+                    }
+                }
+            } if (existingProperties === 1) {
                 // Existing Properties Owned = 1
                 if (purchaseType === "single") {
                     if (residency === "singaporean") {
