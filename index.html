@@ -311,19 +311,21 @@
         }
 
         function calculateStampDuty() {
-            let propertyValue = parseFloat(document.getElementById('property-value').value.replace(/,/g, ''));
-            let residency = document.getElementById('residency').value;
-            let existingProperties = parseInt(document.getElementById('existing-properties').value);
-            let purchaseType = document.getElementById('purchase-type').value;
-            let partnerResidency = document.getElementById('partner-residency') ? document.getElementById('partner-residency').value : null;
+    let propertyValue = parseFloat(document.getElementById('property-value').value.replace(/,/g, ''));
+    if (!propertyValue || propertyValue <= 0) {
+        alert("Please enter a valid property value.");
+        return;
+    }
 
-            if (!propertyValue || propertyValue <= 0) {
-                alert("Please enter a valid property value.");
-                return;
-            }
+    let residency = document.getElementById('residency').value;
+    let existingProperties = parseInt(document.getElementById('existing-properties').value);
+    let purchaseType = document.getElementById('purchase-type').value;
+    let partnerResidency = document.getElementById('partner-status-group').style.display === 'block'
+        ? document.getElementById('partner-residency').value
+        : null;
 
-            let bsd = 0;
-
+    // BSD Calculation
+    let bsd = 0;
     if (propertyValue <= 180000) {
         bsd = propertyValue * 0.01;
     } else if (propertyValue <= 360000) {
@@ -337,7 +339,6 @@
     } else {
         bsd = propertyValue * 0.06 - 60400;
     }
-
     bsd = Math.round(bsd);
 
             // Additional Buyer's Stamp Duty (ABSD) Logic
