@@ -101,75 +101,6 @@
             margin-bottom: 10px;
         }
 
-        .bar-chart {
-            display: flex;
-            margin: 10px 0;
-            background-color: #e0f7fa;
-            height: 12px;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .bar-chart div {
-            height: 100%;
-        }
-
-        .bsd-bar {
-            background-color: #10a788;
-        }
-
-        .absd-bar {
-            background-color: #1de5d2;
-        }
-
-        .legend {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: #555;
-            margin-top: 5px;
-        }
-
-        .legend span:before {
-            content: "";
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            margin-right: 5px;
-            vertical-align: middle;
-        }
-
-        .bsd-legend:before {
-            background-color: #10a788;
-        }
-
-        .absd-legend:before {
-            background-color: #1de5d2;
-        }
-
-        .result-details {
-            width: 100%;
-            text-align: left;
-            margin-top: 20px;
-        }
-
-        .result-details table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 1rem;
-        }
-
-        .result-details th, .result-details td {
-            text-align: left;
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .result-details .total {
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
         .footer-text {
             font-size: 0.85rem;
             color: #888;
@@ -230,7 +161,7 @@
                     <option value="singaporean">Singaporean</option>
                     <option value="pr">Singapore Permanent Resident</option>
                     <option value="foreigner">Foreigner</option>
-                    <option value="foreigner-fta">Foreigner FTA</option>
+                    <option value="foreigner-fta">Foreigner (FTA)</option>
                 </select>
             </div>
             <div class="input-group" id="partner-status-group" style="display: none;">
@@ -239,58 +170,23 @@
                     <option value="singaporean">Singaporean</option>
                     <option value="pr">Singapore Permanent Resident</option>
                     <option value="foreigner">Foreigner</option>
-                    <option value="foreigner-fta">Foreigner FTA</option>
+                    <option value="foreigner-fta">Foreigner (FTA)</option>
                 </select>
             </div>
             <div class="input-group">
                 <label for="existing-properties">Existing Properties Owned</label>
                 <input type="number" id="existing-properties" min="0" value="0">
             </div>
-            <button class="calculate-button" id="calculate-button" onclick="calculateStampDuty()">Calculate Stamp Duty</button>
+            <button class="calculate-button" onclick="calculateStampDuty()">Calculate Stamp Duty</button>
         </div>
 
         <div class="result-section" id="result-section">
-            <div class="intro-section" id="intro-section">   
-                <h3>Your stamp duty</h3>
-                <img src="Picture1.png" alt="Calc Image" width="300" height="300">
-                <p>Enter your details to see a breakdown of your estimated stamp duty.</p>
-            </div>
-
             <div class="result-summary" style="display: none;">
                 <h2>Your Estimated Stamp Duty</h2>
                 <p class="highlight">S$ <span id="total-result">0.00</span></p>
-                <div class="bar-chart">
-                    <div class="bsd-bar" id="bsd-bar" style="width: 50%;"></div>
-                    <div class="absd-bar" id="absd-bar" style="width: 50%;"></div>
-                </div>
-                <div class="legend">
-                    <span class="bsd-legend">Buyer's Stamp Duty S$ <span id="bsd-legend-amount">0.00</span></span>
-                    <span class="absd-legend">Additional Buyer's Stamp Duty S$ <span id="absd-legend-amount">0.00</span></span>
-                </div>
-            </div>
-            <div class="result-details" style="display: none;">
-                <table>
-                    <tr>
-                        <th>Property Value</th>
-                        <td>S$ <span id="property-value-result">0.00</span></td>
-                    </tr>
-                    <tr>
-                        <th>Buyer's Stamp Duty (BSD)</th>
-                        <td>S$ <span id="bsd-result">0.00</span></td>
-                    </tr>
-                    <tr>
-                        <th>ABSD</th>
-                        <td>S$ <span id="absd-result">0.00</span></td>
-                    </tr>
-                    <tr class="total">
-                        <th>Total Stamp Duty</th>
-                        <td>S$ <span id="total-result-table">0.00</span></td>
-                    </tr>
-                    <tr>
-                        <th>ABSD Rate</th>
-                        <td><span id="absd-rate">0%</span></td>
-                    </tr>
-                </table>
+                <div>Buyer's Stamp Duty (BSD): S$ <span id="bsd-result">0.00</span></div>
+                <div>Additional Buyer's Stamp Duty (ABSD): S$ <span id="absd-result">0.00</span></div>
+                <div>Total Stamp Duty: S$ <span id="total-result-table">0.00</span></div>
             </div>
             <div class="footer-text">by www.edrickproblemsolver.com</div>
         </div>
@@ -307,41 +203,39 @@
         function togglePartnerStatus() {
             const purchaseType = document.getElementById('purchase-type').value;
             const partnerStatusGroup = document.getElementById('partner-status-group');
-            partnerStatusGroup.style.display = (purchaseType === 'joint-married' || (purchaseType === 'joint-not-married') ? 'block' : 'none';
+            partnerStatusGroup.style.display = 
+                (purchaseType === 'joint-married' || purchaseType === 'joint-not-married') 
+                ? 'block' 
+                : 'none';
         }
 
         function calculateStampDuty() {
-    let propertyValue = parseFloat(document.getElementById('property-value').value.replace(/,/g, ''));
-    if (!propertyValue || propertyValue <= 0) {
-        alert("Please enter a valid property value.");
-        return;
-    }
+            let propertyValue = parseFloat(document.getElementById('property-value').value.replace(/,/g, ''));
+            if (!propertyValue || propertyValue <= 0) {
+                alert("Please enter a valid property value.");
+                return;
+            }
 
-    let residency = document.getElementById('residency').value;
-    let existingProperties = parseInt(document.getElementById('existing-properties').value);
-    let purchaseType = document.getElementById('purchase-type').value;
-    let partnerResidency = document.getElementById('partner-status-group').style.display === 'block'
-        ? document.getElementById('partner-residency').value
-        : null;
+            let residency = document.getElementById('residency').value;
+            let existingProperties = parseInt(document.getElementById('existing-properties').value);
+            let purchaseType = document.getElementById('purchase-type').value;
+            let partnerResidency = document.getElementById('partner-status-group').style.display === 'block'
+                ? document.getElementById('partner-residency').value
+                : null;
 
-    // BSD Calculation
-    let bsd = 0;
-    if (propertyValue <= 180000) {
-        bsd = propertyValue * 0.01;
-    } else if (propertyValue <= 360000) {
-        bsd = propertyValue * 0.02 - 1800;
-    } else if (propertyValue <= 1000000) {
-        bsd = propertyValue * 0.03 - 5400;
-    } else if (propertyValue <= 1500000) {
-        bsd = propertyValue * 0.04 - 15400;
-    } else if (propertyValue <= 3000000) {
-        bsd = propertyValue * 0.05 - 30400;
-    } else {
-        bsd = propertyValue * 0.06 - 60400;
-    }
-    bsd = Math.round(bsd);
+            // BSD Calculation
+            let bsd = 0;
+            if (propertyValue <= 180000) {
+                bsd = propertyValue * 0.01;
+            } else if (propertyValue <= 360000) {
+                bsd = 1800 + (propertyValue - 180000) * 0.02;
+            } else if (propertyValue <= 1000000) {
+                bsd = 5400 + (propertyValue - 360000) * 0.03;
+            } else {
+                bsd = 15400 + (propertyValue - 1000000) * 0.04;
+            }
 
-            // Additional Buyer's Stamp Duty (ABSD) Logic
+            // ABSD Calculation
             let absd = 0;
             let absdRate = "0%";
 
@@ -695,29 +589,16 @@
                 }
             } 
 
-            absd = Math.round(absd);
+            let absd = Math.round(propertyValue * absdRate / 100);
+
+            // Display Results
             let totalStampDuty = bsd + absd;
+            document.getElementById('bsd-result').innerText = bsd.toLocaleString();
+            document.getElementById('absd-result').innerText = absd.toLocaleString();
+            document.getElementById('total-result').innerText = totalStampDuty.toLocaleString();
+            document.getElementById('total-result-table').innerText = totalStampDuty.toLocaleString();
 
-            document.getElementById('property-value-result').innerHTML = propertyValue.toLocaleString();
-            document.getElementById('bsd-result').innerHTML = bsd.toLocaleString();
-            document.getElementById('absd-result').innerHTML = absd.toLocaleString();
-            document.getElementById('total-result').innerHTML = totalStampDuty.toLocaleString();
-            document.getElementById('total-result-table').innerHTML = totalStampDuty.toLocaleString();
-            document.getElementById('absd-rate').innerHTML = absdRate;
-
-            let total = bsd + absd;
-            if (total > 0) {
-                document.getElementById('bsd-bar').style.width = `${(bsd / total) * 100}%`;
-                document.getElementById('absd-bar').style.width = `${(absd / total) * 100}%`;
-            } else {
-                document.getElementById('bsd-bar').style.width = "0%";
-                document.getElementById('absd-bar').style.width = "0%";
-            }
-
-            document.getElementById('intro-section').style.display = "none";
             document.querySelector('.result-summary').style.display = "block";
-            document.querySelector('.result-details').style.display = "block";
-            document.getElementById('calculate-button').innerText = 'Calculate Again';
         }
     </script>
 </body>
