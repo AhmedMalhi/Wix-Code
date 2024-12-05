@@ -307,8 +307,7 @@
         function togglePartnerStatus() {
             const purchaseType = document.getElementById('purchase-type').value;
             const partnerStatusGroup = document.getElementById('partner-status-group');
-            partnerStatusGroup.style.display = (purchaseType === 'joint-married') ? 'block' : 'none';
-            partnerStatusGroup.style.display = (purchaseType === 'joint-not-married') ? 'block' : 'none';
+            partnerStatusGroup.style.display = (purchaseType === 'joint-married' || (purchaseType === 'joint-not-married') ? 'block' : 'none';
         }
 
         function calculateStampDuty() {
